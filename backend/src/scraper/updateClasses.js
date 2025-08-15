@@ -1,0 +1,1 @@
+// Takes class information from raw_course_data and creates corresponding classes

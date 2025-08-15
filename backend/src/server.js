@@ -1,5 +1,10 @@
 import express from "express";
 import cron from "node-cron";
+import dotenv from "dotenv";
+
+import { connectDB } from "./config/db.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -7,6 +12,9 @@ const app = express();
 //     console.log("Current second", new Date().getSeconds());
 // })
 
-app.listen(5001, () => {
+
+connectDB().then(() => {
+    app.listen(5001, () => {
     console.log("Server started on PORT: 5001");
+    });
 });
