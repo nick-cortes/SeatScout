@@ -24,6 +24,10 @@ const classSchema = new mongoose.Schema({
     prof: {
         type: String,
         required: true
+    },
+    url: {
+        type: String,
+        required: true
     }
 });
 
