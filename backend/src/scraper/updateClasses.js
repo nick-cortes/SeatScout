@@ -1,11 +1,13 @@
 // Takes class information from raw_course_data and creates corresponding classes
 import fs from "fs";
+import Class from "../models/Class";
 
 // make sure to run script from backend folder
 const rawData = fs.readFileSync('./src/scraper/raw_course_data.json', 'utf8');
 const courseData = JSON.parse(rawData);
 
-let i = 0;
+const crnURL = "https://oscar.gatech.edu/bprod/bwckschd.p_disp_detail_sched?term_in=202508&crn_in="
+
 for (const course in courseData["courses"]) {
     const courseName = course;
     const courseTitle = courseData["courses"][course][0]
@@ -20,18 +22,34 @@ for (const course in courseData["courses"]) {
         if (typeof(sectionProperties[1][0]) === "undefined") {
             /**
              * as far as I can tell, these are not valid classes, they do not have any enrollment, unlikely to
-             * affect users but could be worth investigating later
+             * affect users but could be worth investigating later, some are in gt-scheduler, others are not
              */
             continue;
-            console.log(`https://oscar.gatech.edu/bprod/bwckschd.p_disp_detail_sched?term_in=202508&crn_in=${crn}`);
         }
-
+    
         let prof = "Unknown Instructor";
         if (typeof(sectionProperties[1][0][4][0]) !== "undefined") {
             prof = sectionProperties[1][0][4][0];
-        } 
-        // const prof = ((typeof(sectionProperties[1][0][2][4]) === "undefined") ? "Unkown Instructor" : sectionProperties[1][0][4][0]);
-        console.log(prof);
-        i++;
+        }
+        const courseURL = `${crnURL}${crn}`;
+
+        // Create instance of class in DB
+        const newClass = new Class({
+            term: 0,
+            crn: crn,
+            name: courseName,
+            section: section,
+            title: courseTitle,
+            prof: prof,
+            url: courseURL
+        });
+
+        // await newClass.save();
     }
 }
+
+/**
+ * To see all valid classes with links
+ * const string = `${prof} ${crnURL}${crn} \n`
+ * fs.writeFileSync('./src/scraper/classes.txt', string, { flag: 'a' });
+ */
