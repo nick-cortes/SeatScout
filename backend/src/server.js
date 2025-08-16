@@ -12,6 +12,7 @@ const app = express();
 //     console.log("Current second", new Date().getSeconds());
 // })
 
+app.use(express.json());
 
 connectDB().then(() => {
     app.listen(5001, () => {
