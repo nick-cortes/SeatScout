@@ -3,6 +3,7 @@ import cron from "node-cron";
 import dotenv from "dotenv";
 
 import { connectDB } from "./config/db.js";
+import { updateClasses, deleteClasses } from "./scraper/updateClasses.js";
 
 dotenv.config();
 
@@ -18,4 +19,6 @@ connectDB().then(() => {
     app.listen(5001, () => {
     console.log("Server started on PORT: 5001");
     });
+    // updateClasses(); // only run this when we want to re-update classes
+    // deleteClasses(); // only run this when we want to clear all current classes
 });
