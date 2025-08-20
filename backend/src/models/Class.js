@@ -31,6 +31,9 @@ const classSchema = new mongoose.Schema({
     }
 });
 
+// add autoIndex setting for performance?
+classSchema.index({ term: 1, crn: 1 }, { unique: true });
+
 const Class = mongoose.model('Class', classSchema);
 
 export default Class;

@@ -19,6 +19,6 @@ connectDB().then(() => {
     app.listen(5001, () => {
     console.log("Server started on PORT: 5001");
     });
-    // updateClasses(); // only run this when we want to re-update classes
+    updateClasses(); // only run this when we want to re-update classes
     // deleteClasses(); // only run this when we want to clear all current classes
 });

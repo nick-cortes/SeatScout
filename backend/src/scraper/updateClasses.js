@@ -32,6 +32,7 @@ export async function updateClasses() {
             let prof = "Unknown Instructor";
             if (typeof(sectionProperties[1][0][4][0]) !== "undefined") {
                 prof = sectionProperties[1][0][4][0];
+                prof = prof.substring(0, prof.length - 4);
             }
             const courseURL = `${crnURL}${crn}`;
             try {
@@ -45,19 +46,28 @@ export async function updateClasses() {
                     url: courseURL,
                 };
                 classes.push(newClass);
-                const string = `${prof} ${crnURL}${crn} \n`;
-                fs.writeFileSync('./src/scraper/classes.txt', string, { flag: 'a' });
+                // const string = `${prof} ${crnURL}${crn} \n`
+                // fs.writeFileSync('./src/scraper/classes.txt', string, { flag: 'a' });
             } catch (error) {
-                console.error("Error in creating class:", error);
+                console.error("Error in creating class object:", error);
             }
         }
     }
-    await Class.insertMany(classes);
-    console.log("All classes updated.");
+    try {
+        await Class.insertMany(classes);
+        console.log("All classes updated.");
+    } catch (error) {
+        console.error("Error in updating classes:", error);
+    }
 }
 
 export async function deleteClasses() {
-    await Class.deleteMany({});
+    try {
+        await Class.deleteMany({});
+        console.log("Successfully deleted all classes.");
+    } catch (error) {
+        console.error("Error in deleting classes:", error);
+    }
 }
 
 /**
