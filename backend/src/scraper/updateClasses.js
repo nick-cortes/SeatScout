@@ -46,8 +46,6 @@ export async function updateClasses() {
                     url: courseURL,
                 };
                 classes.push(newClass);
-                // const string = `${prof} ${crnURL}${crn} \n`
-                // fs.writeFileSync('./src/scraper/classes.txt', string, { flag: 'a' });
             } catch (error) {
                 console.error("Error in creating class object:", error);
             }

@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const subscriptionSchema = new mongoose.Schema({
     class: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     users: [{
-        type: ObjectId
+        type: mongoose.Schema.Types.ObjectId
     }],
     lastPoll: {
         type: Date,
