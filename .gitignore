@@ -1,2 +1,2 @@
 .env
-./backend/src/scraper/classes.txt
+./src/scraper/classes.txt
