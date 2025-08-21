@@ -14,8 +14,15 @@ const scrapeSubscription = async () => {
                 return $text.text();
             })
             .toArray();
-        console.log(scrapedData);
-        console.log("Scraped");
+        const capacity = scrapedData[1];
+        const actual = scrapedData[2];
+        const waitlistCapacity = scrapedData[4];
+        const waitlistActual = scrapedData[5];
+        console.log("Capacity:", capacity);
+        console.log("Actual:", actual);
+        console.log("Waitlist capacity:", waitlistCapacity);
+        console.log("Waitlist actual:", waitlistActual);
+        console.log("Successfully Scraped");
     });
 }
 
