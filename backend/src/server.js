@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import { connectDB } from "./config/db.js";
 import { updateClasses, deleteClasses } from "./scraper/updateClasses.js";
+import { testSubscription } from "./scraper/scrape.js";
 
 dotenv.config();
 
@@ -21,4 +22,5 @@ connectDB().then(() => {
     });
     // updateClasses(); // only run this when we want to re-update classes
     // deleteClasses(); // only run this when we want to clear all current classes
+    testSubscription("MATH 3215", "J");
 });

@@ -1,16 +1,19 @@
-import Subscription from "../models/Subscription.js";
 import axios from "axios";
 import * as cheerio from "cheerio";
 
+import Subscription from "../models/Subscription.js";
+import Class from "../models/Class.js"
 
-const scrapeSubscription = async () => {
-    axios.get("https://oscar.gatech.edu/bprod/bwckschd.p_disp_detail_sched?term_in=202508&crn_in=81327")
-    .then(({data}) => {
+
+export const scrapeSubscription = async (subscription) => {
+    const course = await Class.findById(subscription.class);
+    axios.get(course.url)
+    .then(({ data }) => {
         const $ = cheerio.load(data);
 
         const scrapedData = $(".datadisplaytable .dddefault")
-            .map((_, text) => {
-                const $text = $(text);
+            .map((_, info) => {
+                const $text = $(info);
                 return $text.text();
             })
             .toArray();
@@ -26,4 +29,16 @@ const scrapeSubscription = async () => {
     });
 }
 
-scrapeSubscription();
+
+export const testSubscription = async (className, section) => {
+    const classArray = await Class.find({name: className, section: section});
+    const testClass = classArray[0];
+    const dummySubscription = new Subscription({
+        class: testClass._id.toString(),
+        users: [],
+    });
+    await dummySubscription.save();
+    const subscriptionArray = await Subscription.find({name: dummySubscription.name, users: dummySubscription.users});
+    const testSubscription = subscriptionArray[0];
+    await scrapeSubscription(testSubscription);
+};
