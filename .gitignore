@@ -1,2 +1,3 @@
 .env
-./backend/src/scraper/classes.txt
+classes.txt
+node_modules/
