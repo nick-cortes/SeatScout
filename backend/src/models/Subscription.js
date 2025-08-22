@@ -9,9 +9,14 @@ const subscriptionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId
     }],
     lastPoll: {
-        type: Date,
-        default: Date.now
+        type: Number,
+        default: Date.now()
+    },
+    interval: {
+        type: Number,
+        default: 1000
     }
+
 });
 
 const Subscription = mongoose.model('Subscription', subscriptionSchema);
