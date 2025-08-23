@@ -10,7 +10,7 @@ process.env.DEBUG = 'express-openid-connect:*'
 
 router.get("/", login);
 
-router.get("/test", (req, res) => {
+router.get("/test-login", (req, res) => {
     res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
 })
 

@@ -9,9 +9,9 @@ const HomePage = () => {
 
     useEffect(() => {
         const fetchAuth = async () => {
-            res = await axios.get("http://localhost:5001/api/me");
-            setIsAuthenticated(res.isAuthenticated);
-            console.log(res.isAuthenticated);
+            const res = await axios.get("http://localhost:5001/api/me", {withCredentials: true});
+            setIsAuthenticated(res.data.isAuthenticated);
+            console.log(res.data.isAuthenticated);
         };
         fetchAuth();
     }, []);
@@ -19,6 +19,9 @@ const HomePage = () => {
     return isAuthenticated ? (
         <div>
             You are logged in.
+            <a href="http://localhost:5001/logout">
+                <button>Logout</button>
+            </a>
         </div>
     ) : (
         <div>
