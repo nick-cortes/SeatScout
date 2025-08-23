@@ -34,7 +34,7 @@ app.use("/", routes);
 // });
 
 connectDB().then(async () => {
-    app.listen(5001, () => {
-    console.log("Server started on PORT: 5001");
+    app.listen(process.env.PORT, () => {
+    console.log("Server started on PORT:", process.env.PORT);
     });
 });

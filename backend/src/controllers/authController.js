@@ -7,14 +7,15 @@ export async function login(req, res) {
             if (!user) {
                 console.log("First time login, creating User profile");
                 const newUser = new User({
-                    auth0Id: req.oidc.user.sub
+                    auth0Id: req.oidc.user.sub,
+                    email: req.oidc.user.email
                 });
                 await newUser.save();
             } else {
                 console.log("Returning user logged in");
             }
         }
-        res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+        res.redirect("http://localhost:5173/");
     } catch (error) {
         console.log("Error in login controller");
         res.status(500).json({message:"Internal server error"});

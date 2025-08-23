@@ -1,11 +1,15 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import { Route, Routes } from "react-router";
+
+import HomePage from "./pages/HomePage";
 
 const App = () => {
   return (
     <div>
-      App
+      <Routes>
+        <Route path="/" element={<HomePage />}/>
+      </Routes>
     </div>
-  )
-}
+  );
+};
 
 export default App;
