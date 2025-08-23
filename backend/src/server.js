@@ -1,6 +1,8 @@
 import express from "express";
 import cron from "node-cron";
 import dotenv from "dotenv";
+import { auth } from "express-openid-connect";
+import routes from "./routes/routes.js";
 
 import { connectDB } from "./config/db.js";
 import { updateClasses, deleteClasses } from "./scraper/updateClasses.js";
@@ -9,8 +11,20 @@ import { testNewSubscription, deleteAllSubscriptions } from "./scraper/scrapeUti
 
 dotenv.config();
 
-const app = express();
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.SECRET,
+  baseURL: process.env.BASEURL,
+  clientID: process.env.CLIENTID,
+  issuerBaseURL: process.env.ISSUERBASEURL
+};
 
+const app = express();
+app.use(express.json());
+app.use(auth(config));
+
+app.use("/", routes);
 /**
  * Regular course seat scraping job.
  */
@@ -18,8 +32,6 @@ const app = express();
 //     // console.log("Cron job scheduled for this second", new Date().getSeconds());
 //     // scrapeAllSubscriptions();
 // });
-
-app.use(express.json());
 
 connectDB().then(async () => {
     app.listen(5001, () => {
