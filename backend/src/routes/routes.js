@@ -1,9 +1,9 @@
 import express from "express";
 
+import { login } from "../controllers/authController.js";
+
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-})
+router.get("/", login);
 
 export default router;
