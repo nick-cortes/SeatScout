@@ -6,9 +6,9 @@ import routes from "./routes/routes.js";
 import cors from "cors";
 
 import { connectDB } from "./config/db.js";
-import { updateClasses, deleteClasses } from "./scraper/updateClasses.js";
-import { scrapeAllSubscriptions } from "./scraper/scrape.js";
-import { testNewSubscription, deleteAllSubscriptions } from "./scraper/scrapeUtils.js";
+import { updateClasses, deleteClasses } from "./services/scraper/updateClasses.js";
+import { scrapeAllSubscriptions } from "./services/scraper/scrape.js";
+import { testNewSubscription, deleteAllSubscriptions, subscribeUser } from "./services/scraper/scrapeUtils.js";
 
 dotenv.config();
 
@@ -35,13 +35,14 @@ app.use("/", routes);
 /**
  * Regular course seat scraping job.
  */
-// cron.schedule('29,59 * * * * *', () => {
-//     // console.log("Cron job scheduled for this second", new Date().getSeconds());
-//     // scrapeAllSubscriptions();
-// });
+cron.schedule('29,59 * * * * *', () => {
+    console.log("Cron job scheduled for this second", new Date().getSeconds());
+    scrapeAllSubscriptions();
+});
 
 connectDB().then(async () => {
     app.listen(process.env.PORT, () => {
     console.log("Server started on PORT:", process.env.PORT);
     });
+    subscribeUser("acetrainer70nick@gmail.com", "MATH 3215", "J");
 });

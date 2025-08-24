@@ -1,6 +1,6 @@
 // Takes class information from raw_course_data and creates corresponding classes
 import fs from "fs";
-import Class from "../models/Class.js";
+import Class from "../../models/Class.js";
 
 const crnURL = "https://oscar.gatech.edu/bprod/bwckschd.p_disp_detail_sched?term_in=202508&crn_in="
 

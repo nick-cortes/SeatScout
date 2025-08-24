@@ -14,9 +14,12 @@ const subscriptionSchema = new mongoose.Schema({
     },
     interval: {
         type: Number,
-        default: 1000
+        default: 30 * (1000)
+    },
+    status: {
+        type: String,
+        default: "Default Status"
     }
-
 });
 
 const Subscription = mongoose.model('Subscription', subscriptionSchema);

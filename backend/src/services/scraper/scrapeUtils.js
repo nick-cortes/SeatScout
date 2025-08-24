@@ -1,5 +1,6 @@
-import Subscription from "../models/Subscription.js";
-import Class from "../models/Class.js";
+import Subscription from "../../models/Subscription.js";
+import Class from "../../models/Class.js";
+import User from "../../models/User.js";
 
 import { scrapeSubscription } from "./scrape.js";
 
@@ -17,7 +18,27 @@ export async function testNewSubscription(className, section) {
     const subscriptionArray = await Subscription.find({name: dummySubscription.name, users: dummySubscription.users});
     const testSubscription = subscriptionArray[0];
     await scrapeSubscription(testSubscription);
-};
+}
+
+/**
+ * Subscribes a user (by email) to a subscription (by class name and section)
+ */
+export async function subscribeUser(email, courseName, section) {
+    const user = await User.findOne({email: email});
+    const course = await Class.findOne({name: courseName, section: section});
+    const subscription = await Subscription.findOne({class: course._id});
+    if (!user) {
+        console.log("Error in subscribing user. Invalid email");
+        return;
+    } else if (!subscription) {
+        console.log("Error in subscribing user. Invalid course name");
+        return;
+    }
+    subscription.users.push(user._id)
+    await subscription.save();
+    user.subscriptions.push(subscription._id);
+    await user.save();
+}
 
 export async function deleteAllSubscriptions() {
     try {
