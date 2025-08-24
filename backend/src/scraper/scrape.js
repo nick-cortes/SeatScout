@@ -1,9 +1,9 @@
 import axios from "axios";
-import * as cheerio from "cheerio";
-
 import Subscription from "../models/Subscription.js";
 import Class from "../models/Class.js"
 
+import * as cheerio from "cheerio";
+import { mailUsers } from "./notify.js";
 
 export async function scrapeSubscription(subscription) {
     /**
@@ -49,8 +49,8 @@ export async function scrapeSubscription(subscription) {
 
         // notify users
         if (oldStatus !== subscription.status) {
-            // notify, maybe call helper function
-            console.log("Class Status changed! Notify Users!");
+            await mailUsers(course, subscription.status, subscription.users);
+            console.log("Notified all users");
         } else {
             console.log("Class status is the same.")
         }
