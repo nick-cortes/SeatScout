@@ -35,10 +35,10 @@ app.use("/", routes);
 /**
  * Regular course seat scraping job.
  */
-// cron.schedule('29,59 * * * * *', () => {
-//     // console.log("Cron job scheduled for this second", new Date().getSeconds());
-//     // scrapeAllSubscriptions();
-// });
+cron.schedule('29,59 * * * * *', () => {
+    console.log("Cron job scheduled for this second", new Date().getSeconds());
+    scrapeAllSubscriptions();
+});
 
 connectDB().then(async () => {
     app.listen(process.env.PORT, () => {

@@ -8,10 +8,9 @@ import Class from "../models/Class.js"
 export async function scrapeSubscription(subscription) {
     /**
      * we won't always scrape a class, this interval length will eventually need to take into account the 
-     * class seat size, but we may need to change our database structure to accomplish that
+     * class seat size (to scrape bigger classes more often)
      */
-    const scrapeInterval = 20 * (60 * (1000));
-    const nextPollTime = subscription.lastPoll + scrapeInterval;
+    const nextPollTime = subscription.lastPoll + subscription.interval;
     console.log("Time right now:", Date.now());
     console.log("Next poll time:", nextPollTime);
     if (Date.now() < nextPollTime) {
@@ -22,8 +21,6 @@ export async function scrapeSubscription(subscription) {
     const course = await Class.findById(subscription.class);
     axios.get(course.url)
     .then(async ({ data }) => {
-        subscription.lastPoll = Date.now();
-        await subscription.save();
         const $ = cheerio.load(data);
 
         const scrapedData = $(".datadisplaytable .dddefault")
@@ -36,11 +33,34 @@ export async function scrapeSubscription(subscription) {
         const actual = scrapedData[2];
         const waitlistCapacity = scrapedData[4];
         const waitlistActual = scrapedData[5];
+
+        // update subscription info
+        subscription.lastPoll = Date.now();
+
+        const oldStatus = subscription.status
+        if (capacity - actual > waitlistActual) {
+            subscription.status = "Open";
+        } else if (capacity - actual === 0 && waitlistCapacity - waitlistActual === 0) {
+            subscription.status = "Closed";
+        } else { // (capacity - actual <= waitlistActual) 
+            subscription.status = "Waitlist";
+        }
+        await subscription.save();
+
+        // notify users
+        if (oldStatus !== subscription.status) {
+            // notify, maybe call helper function
+            console.log("Class Status changed! Notify Users!");
+        } else {
+            console.log("Class status is the same.")
+        }
+
         console.log("Capacity:", capacity);
         console.log("Actual:", actual);
         console.log("Waitlist capacity:", waitlistCapacity);
         console.log("Waitlist actual:", waitlistActual);
         console.log("Successfully Scraped:", course.name);
+        console.log("Class status is:", subscription.status);
     });
 }
 
