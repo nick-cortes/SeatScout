@@ -1,9 +1,9 @@
 import axios from "axios";
-import Subscription from "../models/Subscription.js";
-import Class from "../models/Class.js"
+import Subscription from "../../models/Subscription.js";
+import Class from "../../models/Class.js";
 
 import * as cheerio from "cheerio";
-import { mailUsers } from "./notify.js";
+import { mailUsers } from "../notify/notify.js";
 
 export async function scrapeSubscription(subscription) {
     /**
@@ -11,8 +11,6 @@ export async function scrapeSubscription(subscription) {
      * class seat size (to scrape bigger classes more often)
      */
     const nextPollTime = subscription.lastPoll + subscription.interval;
-    console.log("Time right now:", Date.now());
-    console.log("Next poll time:", nextPollTime);
     if (Date.now() < nextPollTime) {
         console.log("Subscription has been scraped too recently, try again later.");
         return;
@@ -55,12 +53,12 @@ export async function scrapeSubscription(subscription) {
             console.log("Class status is the same.")
         }
 
-        console.log("Capacity:", capacity);
-        console.log("Actual:", actual);
-        console.log("Waitlist capacity:", waitlistCapacity);
-        console.log("Waitlist actual:", waitlistActual);
-        console.log("Successfully Scraped:", course.name);
-        console.log("Class status is:", subscription.status);
+        // console.log("Capacity:", capacity);
+        // console.log("Actual:", actual);
+        // console.log("Waitlist capacity:", waitlistCapacity);
+        // console.log("Waitlist actual:", waitlistActual);
+        // console.log("Successfully Scraped:", course.name);
+        // console.log("Class status is:", subscription.status);
     });
 }
 
